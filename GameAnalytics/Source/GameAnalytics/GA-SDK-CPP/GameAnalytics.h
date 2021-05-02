@@ -110,6 +110,7 @@ namespace gameanalytics
          static void configureAvailableResourceItemTypes(const char* resourceItemTypes);
          static void configureBuild(const char* build);
          static void configureWritablePath(const char* writablePath);
+         static void disableDeviceInfo();
          static void configureDeviceModel(const char* deviceModel);
          static void configureDeviceManufacturer(const char* deviceManufacturer);
 
@@ -159,6 +160,9 @@ namespace gameanalytics
          static void addRemoteConfigsListener(const std::shared_ptr<IRemoteConfigsListener>& listener);
          static void removeRemoteConfigsListener(const std::shared_ptr<IRemoteConfigsListener>& listener);
          static std::vector<char> getRemoteConfigsContentAsString();
+
+         static std::vector<char> getABTestingId();
+         static std::vector<char> getABTestingVariantId();
 
          // game state changes
          // will affect how session is started / ended

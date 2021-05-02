@@ -1,7 +1,7 @@
 # GA-SDK-UNREAL
 GameAnalytics SDK for the Unreal Engine.
 
-Documentation can be found [here](https://gameanalytics.com/docs/unreal4-sdk).  
+Documentation can be found [here](https://gameanalytics.com/docs/item/unreal-sdk).  
 For UWP support check out the [master_uwp](https://github.com/GameAnalytics/GA-SDK-UNREAL/tree/master_uwp) branch.
 
 If you have any issues or feedback regarding the SDK, please contact our friendly support team [here](https://gameanalytics.com/contact).
@@ -31,6 +31,79 @@ If you have any issues or feedback regarding the SDK, please contact our friendl
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**4.3.14**
+* added idfa consent status field to events (ios)
+
+**4.3.13**
+* added disable device info to settings
+
+**4.3.12**
+* updated client ts validator
+
+**4.3.11**
+* fixed dependencies for iOS (min. XCode 12 required)
+
+**4.3.10**
+* fixed return values for remote configs and ab testing functions
+
+**4.3.9**
+* added support for unreal engine 4.26
+
+**4.3.8**
+* corrected ad event annotation
+
+**4.3.7**
+* added ARM64 architecture to mac libs
+
+**4.3.6**
+* fixed build errors for linux
+
+**4.3.5**
+* fixed log messages output to console in editor
+
+**4.3.4**
+* added editor logs when calling functions in editor play mode
+
+**4.3.3**
+* improved user identifer flow for ios (ios)
+
+**4.3.2**
+* fix to the seperation of sqlite code for some platforms
+
+**4.3.1**
+* seperated sqlite code into its own library (osx, windows, linux)
+
+**4.3.0**
+* updated user identifier flow to prepare for iOS 14 IDFA changes (ios)
+
+**4.2.1**
+* fixed progression event with scores (android)
+
+**4.2.0**
+* exposed functions to get AB testing id and variant id
+
+**4.1.5**
+* fixed link errors for ios
+
+**4.1.4**
+* added support for unreal engine 4.25
+
+**4.1.3**
+* fixed compile errors
+
+**4.1.2**
+* compile error fix for int64
+
+**4.1.1**
+* compile error fixes
+
+**4.1.0**
+* added ad event (ios, android)
+* organizations added to games key list
+
+**4.0.13**
+* logo updated
+
 **4.0.12**
 * uplugin fix
 

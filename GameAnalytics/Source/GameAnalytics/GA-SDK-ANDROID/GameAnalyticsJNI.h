@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <stdint.h>
 
 namespace gameanalytics {
     extern "C"
@@ -28,6 +29,9 @@ namespace gameanalytics {
         extern void jni_addDesignEvent(const char *eventId, const char *fields);
         extern void jni_addDesignEventWithValue(const char *eventId, float value, const char *fields);
         extern void jni_addErrorEvent(int severity, const char *message, const char *fields);
+        extern void jni_addAdEvent(int action, int adType, const char *adSdkName, const char *adPlacement, const char *fields);
+        extern void jni_addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64_t duration, const char *fields);
+        extern void jni_addAdEventWithNoAdReason(int action, int adType, const char *adSdkName, const char *adPlacement, int noAdReason, const char *fields);
 
         extern void jni_setEnabledInfoLog(bool flag);
         extern void jni_setEnabledVerboseLog(bool flag);
@@ -40,9 +44,12 @@ namespace gameanalytics {
         extern void jni_startSession();
         extern void jni_endSession();
 
-        extern void jni_getRemoteConfigsValueAsString(const char *key, char* out);
-        extern void jni_getRemoteConfigsValueAsStringWithDefaultValue(const char *key, const char *defaultValue, char* out);
+        extern void jni_getRemoteConfigsValueAsString(const char *key, char** out);
+        extern void jni_getRemoteConfigsValueAsStringWithDefaultValue(const char *key, const char *defaultValue, char** out);
         extern bool jni_isRemoteConfigsReady();
-        extern void jni_getRemoteConfigsContentAsString(char* out);
+        extern void jni_getRemoteConfigsContentAsString(char** out);
+
+        extern void jni_getABTestingId(char** out);
+        extern void jni_getABTestingVariantId(char** out);
     }
 }

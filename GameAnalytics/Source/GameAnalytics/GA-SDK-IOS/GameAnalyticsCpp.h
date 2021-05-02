@@ -2,6 +2,7 @@
 
 #import <vector>
 #import <string>
+#import <stdint.h>
 
 class GameAnalyticsCpp {
 public:
@@ -27,6 +28,9 @@ public:
     static void addDesignEvent(const char *eventId, const char *fields);
     static void addDesignEventWithValue(const char *eventId, float value, const char *fields);
     static void addErrorEvent(int severity, const char *message, const char *fields);
+    static void addAdEvent(int action, int adType, const char *adSdkName, const char *adPlacement, const char *fields);
+    static void addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64_t duration, const char *fields);
+    static void addAdEventWithNoAdReason(int action, int adType, const char *adSdkName, const char *adPlacement, int noAdReason, const char *fields);
 
     static void setEnabledInfoLog(bool flag);
     static void setEnabledVerboseLog(bool flag);
@@ -39,8 +43,11 @@ public:
     static void startSession();
     static void endSession();
 
-    static void getRemoteConfigsValueAsString(const char *key, char* out);
-    static void getRemoteConfigsValueAsString(const char *key, const char *defaultValue, char* out);
+    static void getRemoteConfigsValueAsString(const char *key, char** out);
+    static void getRemoteConfigsValueAsString(const char *key, const char *defaultValue, char** out);
     static bool isRemoteConfigsReady();
-    static void getRemoteConfigsContentAsString(char* out);
+    static void getRemoteConfigsContentAsString(char** out);
+
+    static void getABTestingId(char** out);
+    static void getABTestingVariantId(char** out);
 };

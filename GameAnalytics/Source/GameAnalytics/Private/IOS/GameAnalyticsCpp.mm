@@ -213,6 +213,52 @@ void GameAnalyticsCpp::addErrorEvent(int severity, const char *message, const ch
     [GameAnalytics addErrorEventWithSeverity:(GAErrorSeverity)severity message:messageString /*fields:fields_dict*/];
 }
 
+void GameAnalyticsCpp::addAdEvent(int action, int adType, const char *adSdkName, const char *adPlacement, const char *fields) {
+    NSString *adSdkNameString = adSdkName != NULL ? [NSString stringWithUTF8String:adSdkName] : nil;
+    NSString *adPlacementString = adPlacement != NULL ? [NSString stringWithUTF8String:adPlacement] : nil;
+    NSString *fieldsString = fields != NULL ? [NSString stringWithUTF8String:fields] : nil;
+    NSDictionary *fields_dict = nil;
+    if (fieldsString) {
+        fields_dict = [NSJSONSerialization JSONObjectWithData:[fieldsString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+    }
+    [GameAnalytics addAdEventWithAction:(GAAdAction)action
+                                 adType:(GAAdType)adType
+                              adSdkName:adSdkNameString
+                            adPlacement:adPlacementString
+                               /*fields:fields_dict*/];
+}
+void GameAnalyticsCpp::addAdEventWithDuration(int action, int adType, const char *adSdkName, const char *adPlacement, int64_t duration, const char *fields) {
+    NSString *adSdkNameString = adSdkName != NULL ? [NSString stringWithUTF8String:adSdkName] : nil;
+    NSString *adPlacementString = adPlacement != NULL ? [NSString stringWithUTF8String:adPlacement] : nil;
+    NSString *fieldsString = fields != NULL ? [NSString stringWithUTF8String:fields] : nil;
+    NSDictionary *fields_dict = nil;
+    if (fieldsString) {
+        fields_dict = [NSJSONSerialization JSONObjectWithData:[fieldsString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+    }
+    [GameAnalytics addAdEventWithAction:(GAAdAction)action
+                                 adType:(GAAdType)adType
+                              adSdkName:adSdkNameString
+                            adPlacement:adPlacementString
+                               duration:(NSInteger)duration
+                               /*fields:fields_dict*/];
+}
+
+void GameAnalyticsCpp::addAdEventWithNoAdReason(int action, int adType, const char *adSdkName, const char *adPlacement, int noAdReason, const char *fields) {
+    NSString *adSdkNameString = adSdkName != NULL ? [NSString stringWithUTF8String:adSdkName] : nil;
+    NSString *adPlacementString = adPlacement != NULL ? [NSString stringWithUTF8String:adPlacement] : nil;
+    NSString *fieldsString = fields != NULL ? [NSString stringWithUTF8String:fields] : nil;
+    NSDictionary *fields_dict = nil;
+    if (fieldsString) {
+        fields_dict = [NSJSONSerialization JSONObjectWithData:[fieldsString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+    }
+    [GameAnalytics addAdEventWithAction:(GAAdAction)action
+                                 adType:(GAAdType)adType
+                              adSdkName:adSdkNameString
+                            adPlacement:adPlacementString
+                               noAdReason:(GAAdError)noAdReason
+                               /*fields:fields_dict*/];
+}
+
 void GameAnalyticsCpp::setEnabledInfoLog(bool flag) {
     [GameAnalytics setEnabledInfoLog:flag];
 }
@@ -252,33 +298,54 @@ void GameAnalyticsCpp::endSession() {
     [GameAnalytics endSession];
 }
 
-void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, char* out) {
+void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, char** out) {
     NSString *keyString = key != NULL ? [NSString stringWithUTF8String:key] : nil;
     NSString *result = [GameAnalytics getRemoteConfigsValueAsString:keyString];
 
     std::string s = result != nil ? [result UTF8String] : "";
-	out = new char[s.size() + 1];
-	snprintf(out, s.size() + 1, "%s", s.c_str());
+    char* tmp = new char[s.size() + 1];
+    snprintf(tmp, s.size() + 1, "%s", s.c_str());
+    *out = tmp;
 }
 
-void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, const char *defaultValue, char* out) {
+void GameAnalyticsCpp::getRemoteConfigsValueAsString(const char *key, const char *defaultValue, char** out) {
     NSString *keyString = key != NULL ? [NSString stringWithUTF8String:key] : nil;
     NSString *defaultValueString = key != NULL ? [NSString stringWithUTF8String:defaultValue] : nil;
     NSString *result = [GameAnalytics getRemoteConfigsValueAsString:keyString defaultValue:defaultValueString];
 
     std::string s = result != nil ? [result UTF8String] : "";
-	out = new char[s.size() + 1];
-	snprintf(out, s.size() + 1, "%s", s.c_str());
+    char* tmp = new char[s.size() + 1];
+    snprintf(tmp, s.size() + 1, "%s", s.c_str());
+    *out = tmp;
 }
 
 bool GameAnalyticsCpp::isRemoteConfigsReady() {
     return [GameAnalytics isRemoteConfigsReady] ? true : false;
 }
 
-void GameAnalyticsCpp::getRemoteConfigsContentAsString(char* out) {
-    NSString *result = [GameAnalytics getRemoteConfigsConfigurations];
+void GameAnalyticsCpp::getRemoteConfigsContentAsString(char** out) {
+    NSString *result = [GameAnalytics getRemoteConfigsContentAsString];
 
     std::string s = result != nil ? [result UTF8String] : "";
-	out = new char[s.size() + 1];
-	snprintf(out, s.size() + 1, "%s", s.c_str());
+    char* tmp = new char[s.size() + 1];
+    snprintf(tmp, s.size() + 1, "%s", s.c_str());
+    *out = tmp;
+}
+
+void GameAnalyticsCpp::getABTestingId(char** out) {
+    NSString *result = [GameAnalytics getABTestingId];
+
+    std::string s = result != nil ? [result UTF8String] : "";
+    char* tmp = new char[s.size() + 1];
+    snprintf(tmp, s.size() + 1, "%s", s.c_str());
+    *out = tmp;
+}
+
+void GameAnalyticsCpp::getABTestingVariantId(char** out) {
+    NSString *result = [GameAnalytics getABTestingVariantId];
+
+    std::string s = result != nil ? [result UTF8String] : "";
+    char* tmp = new char[s.size() + 1];
+    snprintf(tmp, s.size() + 1, "%s", s.c_str());
+    *out = tmp;
 }

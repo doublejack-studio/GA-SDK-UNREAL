@@ -9,9 +9,12 @@
 
 #include <string>
 #include <vector>
+#include <stdint.h>
 
 #include "UObject/Object.h"
 #include "GameAnalytics.generated.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogGameAnalyticsAnalytics, Display, All);
 
 UENUM()
 enum class EGAResourceFlowType : uint8
@@ -41,6 +44,42 @@ enum class EGAErrorSeverity : uint8
     critical = 5
 };
 
+UENUM()
+enum class EGAAdAction : uint8
+{
+    undefined = 0,
+    clicked = 1,
+    show = 2,
+    failedshow = 3,
+    rewardreceived = 4,
+    request = 5,
+    loaded = 6
+};
+
+UENUM()
+enum class EGAAdType : uint8
+{
+    undefined = 0,
+    video = 1,
+    rewardedvideo = 2,
+    playable = 3,
+    interstitial = 4,
+    offerwall = 5,
+    banner = 6
+};
+
+UENUM()
+enum class EGAAdError : uint8
+{
+    undefined = 0,
+    unknown = 1,
+    offline = 2,
+    nofill = 3,
+    internalerror = 4,
+    invalidrequest = 5,
+    unabletoprecache = 6
+};
+
 UCLASS()
 class GAMEANALYTICS_API UGameAnalytics : public UObject
 {
@@ -57,6 +96,7 @@ public:
 
     static void configureBuild(const char *build);
     static void configureAutoDetectAppVersion(bool flag);
+    static void disableDeviceInfo();
     static void configureUserId(const char *userId);
     static void configureSdkGameEngineVersion(const char *gameEngineSdkVersion);
     static void configureGameEngineVersion(const char *gameEngineVersion);
@@ -80,6 +120,11 @@ public:
     static void addDesignEvent(const char *eventId/*, const char *fields*/);
     static void addDesignEvent(const char *eventId, float value/*, const char *fields*/);
     static void addErrorEvent(EGAErrorSeverity severity, const char *message/*, const char *fields*/);
+#if PLATFORM_IOS || PLATFORM_ANDROID
+    static void addAdEvent(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement);
+    static void addAdEventWithDuration(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, int64_t duration);
+    static void addAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const char *adSdkName, const char *adPlacement, EGAAdError noAdReason);
+#endif
 
     static void setEnabledInfoLog(bool flag);
     static void setEnabledVerboseLog(bool flag);
@@ -98,6 +143,9 @@ public:
     static FString getRemoteConfigsValueAsString(const char *key, const char *defaultValue);
     static bool isRemoteConfigsReady();
     static FString getRemoteConfigsContentAsString();
+
+    static FString getABTestingId();
+    static FString getABTestingVariantId();
 
     // Bluprint functions
 
@@ -135,7 +183,7 @@ public:
     static void AddProgressionEventWithOneTwoAndThree(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03/*, const char *fields*/);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
-    static void AddProgressionEvenWithOneTwoThreeAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score/*, const char *fields*/);
+    static void AddProgressionEventWithOneTwoThreeAndScore(EGAProgressionStatus ProgressionStatus, const FString& Progression01, const FString& Progression02, const FString& Progression03, int Score/*, const char *fields*/);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddDesignEvent(const FString& EventId/*, const char *fields*/);
@@ -145,6 +193,18 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void AddErrorEvent(EGAErrorSeverity Severity, const FString& Message/*, const char *fields*/);
+
+    // ONLY FOR IOS AND ANDROID
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddAdEvent(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement/*, const char *fields*/);
+
+    // ONLY FOR IOS AND ANDROID
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddAdEventWithDuration(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, int64 duration/*, const char *fields*/);
+
+    // ONLY FOR IOS AND ANDROID
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static void AddAdEventWithNoAdReason(EGAAdAction action, EGAAdType adType, const FString& adSdkName, const FString& adPlacement, EGAAdError noAdReason/*, const char *fields*/);
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void SetCustomDimension01(const FString& CustomDimension);
@@ -166,6 +226,12 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static FString GetRemoteConfigsContentAsString();
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static FString GetABTestingId();
+
+    UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
+    static FString GetABTestingVariantId();
 
     UFUNCTION(BlueprintCallable, Category = "GameAnalytics")
     static void OnQuit();
